@@ -167,6 +167,11 @@ app.get("/logout", (req, res) => {
   res.end();
 });
 
+app.post("/items", cookieAuth, addItem);
+
+app.get("/items", cookieAuth, getItems);
+
+app.get("/items/search", cookieAuth, searchItems);
 
 // Add initDB function here
 async function initDB ()
