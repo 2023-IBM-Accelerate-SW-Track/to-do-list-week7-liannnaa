@@ -17,6 +17,18 @@ if (useCloudant)
     initDB();
 }
 
+const basicAuth = require("express-basic-auth");
+var { authenticator, upsertUser, cookieAuth } = require("./authentication");
+const auth = basicAuth({
+    authorizer: authenticator
+});
+const cookieParser = require("cookie-parser");
+app.use(cookieParser("82e4e438a0705fabf61f9854e3b575af"));
+
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:3000'
+}));
 
 app.use(cors());
 app.use(bodyParser.json({ extended: true }));
