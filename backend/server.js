@@ -149,6 +149,24 @@ async function searchItems (request, response) {
     }
 };
 
+app.get("/authenticate", auth, (req, res) => {
+  console.log(`user logging in: ${req.auth.user}`);
+  res.cookie('user', req.auth.user, { signed: true });
+  res.sendStatus(200);
+});
+
+app.post("/users", (req, res) => {
+  const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
+  const [username, password] = Buffer.from(b64auth, 'base64').toString().split(':')
+  const upsertSucceeded = upsertUser(username, password)
+  res.sendStatus(upsertSucceeded ? 200 : 401);
+});
+
+app.get("/logout", (req, res) => {
+  res.clearCookie('user');
+  res.end();
+});
+
 
 // Add initDB function here
 async function initDB ()
